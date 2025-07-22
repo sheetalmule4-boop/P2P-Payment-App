@@ -1,0 +1,11 @@
+id,user_id,date,time,court,participants,amount_paid,card_used
+1,1,2025-07-15,9:00am - 10:00am,Court 1,"[""dianalopez"", ""diegogarcia1""]","{""dianalopez"": ""13.53"", ""diegogarcia1"": ""13.53""}","{""dianalopez"": ""(04/2031"", ""diegogarcia1"": ""(04/2031""}"
+2,1,2025-07-15,8:00am - 9:00am,Court 1,"[""dianalopez""]","{""dianalopez"": ""27.06""}","{""dianalopez"": ""(03/2026""}"
+3,1,2025-07-15,11:00am - 12:00pm,Court 1,"[""dianalopez""]","{""dianalopez"": ""27.06""}","{""dianalopez"": {""last4"": ""(03/2026"", ""type"": ""unknown""}}"
+4,1,2025-07-15,10:00am - 11:00am,Court 1,"[""dianalopez""]","{""dianalopez"": ""27.06""}","{""dianalopez"": {""last4"": ""0005"", ""type"": ""unknown""}}"
+5,1,2025-07-17,8:00pm - 9:00pm,Court 1,"[""dianalopez""]","{""dianalopez"": ""27.06""}","{""dianalopez"": {""last4"": ""0005"", ""type"": ""unknown""}}"
+6,1,2025-07-19,10:00am - 11:00am,Court 1,"[""dianalopez""]","{""dianalopez"": ""27.06""}","{""dianalopez"": {""last4"": ""0005"", ""type"": ""unknown""}}"
+7,1,2025-07-21,10:00am - 11:00am,Court 1,"[""dianalopez""]","{""dianalopez"": ""27.06""}","{""dianalopez"": {""last4"": ""0005"", ""type"": ""unknown""}}"
+8,1,2025-07-18,10:00am - 11:00am,Court 1,"[""dianalopez"", ""diegogarcia1"", ""maria.rodriguez"", ""juancarlos80""]","{""dianalopez"": ""5.41"", ""diegogarcia1"": ""5.41"", ""maria.rodriguez"": ""5.41"", ""juancarlos80"": ""5.41""}","{""dianalopez"": {""last4"": ""0005"", ""type"": ""unknown""}, ""diegogarcia1"": {""last4"": ""0005"", ""type"": ""unknown""}, ""maria.rodriguez"": {""last4"": ""0005"", ""type"": ""unknown""}, ""juancarlos80"": {""last4"": ""0005"", ""type"": ""unknown""}}"
+9,2,2025-07-15,7:00pm - 8:00pm,Court 1,"[""diegogarcia1""]","{""diegogarcia1"": ""27.06""}","{""diegogarcia1"": {""last4"": ""4449""}}"
+10,3,2025-07-21,8:00pm - 9:00pm,Court 1,"[""maria.rodriguez""]","{""maria.rodriguez"": ""27.06""}","{""maria.rodriguez"": {""last4"": ""0000""}}"

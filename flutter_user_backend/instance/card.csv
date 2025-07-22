@@ -1,0 +1,8 @@
+id,user_id,card_number,name_on_card,address,city,state,zip_code,expiry_month,expiry_year,cvv,card_type
+1,1,0005,Diana Lopez,13 West Street,New York,New York,10011,03,2026,403,unknown
+2,1,8431,Diana Lopez,13 West Street,New York,New York,10011,04,2031,123,unknown
+3,1,8250,Diana Lopez,13 West Street,New York,New York,10011,08,2029,857,
+4,1,5100,Diana Lopez,13 West Street,New York,New York,10011,06,2028,930,
+5,2,4449,Diego Garcia,40 Washington Square Street,New York,New York,10012,03,2030,156,
+6,2,0029,Diego Garcia,40 Washington Square Street,New York,New York,10012,08,2029,852,
+7,3,0000,Maria Rodriguez,20 Cooper Street,New York,New York,10003,02,2030,737,
