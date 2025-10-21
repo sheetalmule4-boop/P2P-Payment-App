@@ -5,25 +5,39 @@ It supports user authentication, payment processing, and real-time transaction t
 
 **Tech Stack**
 Frontend (Mobile Application)
+
 Flutter – Cross-platform UI framework for iOS and Android development
+
 Dart – Programming language used with Flutter
+
 Visual Studio Code – Primary IDE for Flutter development
+
 SharedPreferences – Local key-value storage for lightweight data persistence
+
 Xcode – iOS emulator and development tool for app testing and debugging
 
 Backend (Server Application)
+
 Flask – Lightweight Python web framework for building RESTful APIs
+
 Python – Backend programming language for business logic and API integration
+
 SQLite – Relational database for storing user, booking, and transaction data
+
 SQLAlchemy – Object Relational Mapper (ORM) for efficient and secure database interaction
 
 **Key Features**
 
 Book Paddle Courts – View and reserve available courts with friends
+
 Split and Share Expenses – Divide costs among group members seamlessly
+
 Transaction History – View and track previous payments and bookings
+
 Court Availability – Browse available time slots in real-time
+
 Wallet Management – Add and manage cards securely within the app
+
 P2P Payments – Send and receive funds using Mastercard Send APIs
 
 **Authentication and API Integration**
