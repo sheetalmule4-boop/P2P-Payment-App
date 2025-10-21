@@ -57,14 +57,26 @@ Secure data handling and modular architecture
 Real-world fintech workflow simulation with Mastercard Send
 
 User application flow:
-1. User register in the app using personal details like Name, Email ID, username (User choice) and Phone Number.
-2. User login into the app using username and password. (OAUTH authentication is supported)
-3. User can add card into the app to use to make payments
-4. User can view all available courts based on date and time.
-5. User selects court and make decision about the payment whether it will be one payment or split payment
-6. If user selects split payment, then system will ask to select usernames of other players.
-7. All players will be charged equal amount to book the court.
-8. Transaction history will be saved to view transactions and confirmation email will be sent to all players.
-9. User data is stored in MySQL database and Mastercard Send API is called to perform actual payment processing.
+1. User Registration:
+Users register with details such as name, email, username, and phone number.
+
+2. Login & Authentication:
+OAuth 2.0-based authentication is supported for secure login.
+
+3. Wallet Setup:
+Users can add and manage cards for future payments.
+
+4. Court Booking:
+View available courts filtered by date and time, then select a slot to book.
+
+5. Payment Options:
+Choose between a single payment or split payment mode.
+In split mode, users select other participants, and the cost is divided equally.
+
+6. Transaction Processing:
+Mastercard Send APIs are used for fund transfer and transaction processing.
+
+7. Transaction History & Notifications:
+All transactions are logged in the database, and confirmation emails are sent to all participants.
 
 
