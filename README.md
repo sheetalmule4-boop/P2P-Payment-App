@@ -35,8 +35,11 @@ For security reasons, certain sensitive components (such as OAuth 2.0, JWT-based
 
 Paddle App highlights:
 Cross-platform development using Flutter
+
 REST API integration using Flask and SQLAlchemy
+
 Secure data handling and modular architecture
+
 Real-world fintech workflow simulation with Mastercard Send
 
 User application flow:
