@@ -36,6 +36,8 @@ For security reasons, certain sensitive components (such as OAuth 2.0, JWT-based
 Paddle App highlights:
 Cross-platform development using Flutter
 REST API integration using Flask and SQLAlchemy
+Secure data handling and modular architecture
+Real-world fintech workflow simulation with Mastercard Send
 
 User application flow:
 1. User register in the app using personal details like Name, Email ID, username (User choice) and Phone Number.
@@ -48,6 +50,4 @@ User application flow:
 8. Transaction history will be saved to view transactions and confirmation email will be sent to all players.
 9. User data is stored in MySQL database and Mastercard Send API is called to perform actual payment processing.
 
-Secure data handling and modular architecture
 
-Real-world fintech workflow simulation with Mastercard Send
