@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'checkout_screen.dart';
 import '../constants.dart';
 
+// CourtBookingScreen is the main screen for booking courts
 class CourtBookingScreen extends StatefulWidget {
   final bool showConfirmation;
   final String? confirmationMessage;
@@ -101,7 +102,7 @@ class _CourtBookingScreenState extends State<CourtBookingScreen> with TickerProv
       });
     }
   }
-
+  // Loads reservations for the current week
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -110,17 +111,20 @@ class _CourtBookingScreenState extends State<CourtBookingScreen> with TickerProv
     }
   }
 
+  // Loads reservations with a delay to ensure UI is ready
   Future<void> _loadReservationsWithDelay() async {
     await Future.delayed(const Duration(milliseconds: 500));
     await _loadReservations();
   }
 
+  // Loads reservations from the server
   @override
   void dispose() {
     _animationController.dispose();
     super.dispose();
   }
 
+  // Fetches reservations for the current week
   Future<void> _loadReservations() async {
     final List<Map<String, dynamic>> weekDates = _generateWeekDates();
     Map<String, Map<String, Set<String>>> allReserved = {};
@@ -164,6 +168,7 @@ class _CourtBookingScreenState extends State<CourtBookingScreen> with TickerProv
     }
   }
 
+  // Handles navigation and booking logic; this method is called when a bottom navigation item is tapped
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -227,6 +232,7 @@ class _CourtBookingScreenState extends State<CourtBookingScreen> with TickerProv
     }
   }
 
+  // Navigates to the previous or next week, adjusting the day offset and resetting the selected day index
   void _navigateDays(int direction) {
     _animationController.forward().then((_) {
       setState(() {
@@ -253,6 +259,7 @@ class _CourtBookingScreenState extends State<CourtBookingScreen> with TickerProv
     });
   }
 
+  // Returns the abbreviated name of the day based on its weekday number
   String _getDayName(int weekday) {
     switch (weekday) {
       case 1: return 'Mon';
@@ -266,6 +273,7 @@ class _CourtBookingScreenState extends State<CourtBookingScreen> with TickerProv
     }
   }
 
+  // Generates time slots for the selected date, checking availability and reserved courts
   List<Map<String, dynamic>> _getTimeSlots() {
     final List<Map<String, dynamic>> slots = [];
 
@@ -321,7 +329,6 @@ class _CourtBookingScreenState extends State<CourtBookingScreen> with TickerProv
           });
         }
       }
-
       // Advance to the next one-hour block
       start = end;
     }
@@ -329,6 +336,7 @@ class _CourtBookingScreenState extends State<CourtBookingScreen> with TickerProv
     return slots;
   }
 
+  // Formats the time in a 12-hour format with am/pm
   String _formatTime(DateTime time) {
     final hour = time.hour > 12 ? time.hour - 12 : time.hour == 0 ? 12 : time.hour;
     final minute = time.minute.toString().padLeft(2, '0');
@@ -336,6 +344,7 @@ class _CourtBookingScreenState extends State<CourtBookingScreen> with TickerProv
     return '$hour:$minute$period';
   }
 
+  // Shows a confirmation dialog after a successful reservation
   void _showReservationConfirmation(String reservedTime, String court, [DateTime? reservationDate]) {
     final selectedDate = reservationDate ?? _generateWeekDates()[_selectedDayIndex]['fullDate'] as DateTime;
     final formattedDate = '${selectedDate.month}/${selectedDate.day}/${selectedDate.year}';
@@ -386,6 +395,7 @@ class _CourtBookingScreenState extends State<CourtBookingScreen> with TickerProv
     );
   }
 
+  // Builds the bottom navigation item, creates a column with an icon and label
   Widget _buildNavItem(IconData icon, String label, int index) {
     final isSelected = _selectedIndex == index;
     return GestureDetector(
@@ -407,6 +417,7 @@ class _CourtBookingScreenState extends State<CourtBookingScreen> with TickerProv
     );
   }
 
+  // Builds the main UI for the CourtBookingScreen
   @override
   Widget build(BuildContext context) {
     final weekDates = _generateWeekDates();
@@ -421,6 +432,31 @@ class _CourtBookingScreenState extends State<CourtBookingScreen> with TickerProv
         centerTitle: true,
         foregroundColor: Colors.black87,
         title: Image.asset('assets/omni_logo.png', height: 32),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 12),
+            child: GestureDetector(
+              onTap: () async {
+                final prefs = await SharedPreferences.getInstance();
+                await prefs.clear();
+                if (context.mounted) {
+                  Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+                }
+              },
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Icon(Icons.logout, color: Colors.black),
+                  SizedBox(height: 2),
+                  Text(
+                    'Sign out',
+                    style: TextStyle(fontSize: 10, color: Colors.black),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
       body: Column(
         children: [

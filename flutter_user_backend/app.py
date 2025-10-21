@@ -4,6 +4,9 @@ from flask_cors import CORS
 import sqlite3
 import os
 import json
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
 
 app = Flask(__name__)
@@ -15,6 +18,29 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 DB_PATH = os.path.join(os.path.dirname(__file__), 'instance', 'users.db')
+SMTP_SERVER = '192.168.10.10'
+SMTP_PORT = 8125
+FROM_EMAIL = 'no-reply@omnipayments.com'
+
+
+def send_email(to_email, subject, body):
+    msg = MIMEMultipart()
+    msg['From'] = FROM_EMAIL
+    msg['To'] = to_email
+    msg['Subject'] = subject
+
+    # Attach plain text body
+    part1 = MIMEText(body, 'plain')
+    msg.attach(part1)
+
+    try:
+        with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
+            server.set_debuglevel(1)
+            server.sendmail(FROM_EMAIL, [to_email], msg.as_string())
+            print("Email sent to", to_email)
+    except Exception as e:
+        print("Failed to send email:", e)
+
 
 @app.route('/search_users', methods=['GET'])
 def search_users():
@@ -109,7 +135,24 @@ def add_booking():
     )
     db.session.add(booking)
     db.session.commit()
+
+    user = User.query.get(user_id)
+    print("Fetched user:", user)
+    if user and user.email_id:
+        print("Preparing to send email to:", user.email_id)
+        subject = "Booking Confirmed"
+        body = f"""Hi {user.first_name},
+
+Your reservation for court {court} on {date} at {time} has been successfully confirmed.
+
+Thanks,
+OmniPayments Padle Team
+"""
+        print(f"Sending email to {user.email_id}")
+        send_email(to_email=user.email_id, subject=subject, body=body)
+
     return jsonify({'message': 'Booking saved'}), 201
+
 
 @app.route('/get_user_bookings/<int:user_id>', methods=['GET'])
 def get_user_bookings(user_id):
@@ -307,9 +350,24 @@ def cancel_booking():
     if not booking:
         return jsonify({'error': 'Booking not found'}), 404
 
+    user = User.query.get(booking.user_id)
+
     db.session.delete(booking)
     db.session.commit()
+
+    if user and user.email_id:
+        subject = "Your Reservation Has Been Cancelled"
+        body = f"""Hi {user.first_name},
+
+Your reservation for court {court} on {date} at {time} has been successfully cancelled.
+
+Thanks,
+OmniPayments Team
+"""
+        send_email(to_email=user.email_id, subject=subject, body=body)
+
     return jsonify({'message': 'Booking cancelled'}), 200
+
 
 
 if __name__ == '__main__':

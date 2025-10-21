@@ -1,5 +1,6 @@
 from app import app, db, States
 
+# This script seeds the database with a list of US states.
 with app.app_context():
     db.create_all()
 

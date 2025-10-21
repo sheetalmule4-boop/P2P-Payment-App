@@ -4,8 +4,10 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'booking_detail_screen.dart';
+import 'reservation_graph_screen.dart';
 import '../constants.dart';
 
+// BookingScreen displays the user's bookings, both past and future.
 class BookingScreen extends StatefulWidget {
   const BookingScreen({super.key});
 
@@ -25,6 +27,7 @@ class _BookingScreenState extends State<BookingScreen> {
     _loadUserIdAndBookings();
   }
 
+  // Loads the user ID from SharedPreferences and fetches bookings
   Future<void> _loadUserIdAndBookings() async {
     final prefs = await SharedPreferences.getInstance();
     final userId = prefs.getInt('user_id');
@@ -42,6 +45,7 @@ class _BookingScreenState extends State<BookingScreen> {
     }
   }
 
+  // Fetches bookings for the user from the API
   Future<void> _loadBookings() async {
     if (_userId == null) return;
 
@@ -141,7 +145,7 @@ class _BookingScreenState extends State<BookingScreen> {
       });
     }
   }
-
+  // Removes a booking from the list and updates the state
   void _removeBookingFromList(String date, String time, String court) {
     print("Removing booking: $date $time $court");
     setState(() {
@@ -159,6 +163,7 @@ class _BookingScreenState extends State<BookingScreen> {
     });
   }
 
+  // Parses the date and time from the booking data
   DateTime _parseDateTime(Map<String, dynamic> booking) {
     final date = booking['date'] as String;
     final timeStr = booking['time'] as String;
@@ -175,6 +180,7 @@ class _BookingScreenState extends State<BookingScreen> {
     );
   }
 
+  // Parses the end date and time from the booking data
   DateTime _parseEndDateTime(Map<String, dynamic> booking) {
     final date = booking['date'] as String;
     final timeStr = booking['time'] as String;
@@ -191,6 +197,7 @@ class _BookingScreenState extends State<BookingScreen> {
     );
   }
 
+  // Parses a time string into a TimeOfDay object
   TimeOfDay _parseTimeString(String timeStr) {
     final isPM = timeStr.toLowerCase().contains('pm');
     final isAM = timeStr.toLowerCase().contains('am');
@@ -214,6 +221,7 @@ class _BookingScreenState extends State<BookingScreen> {
     return '$year-$month-$day';
   }
 
+  // Builds the UI for the BookingScreen
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -316,6 +324,35 @@ class _BookingScreenState extends State<BookingScreen> {
                           ),
                           const SizedBox(height: 12),
                           ..._pastBookings.map((booking) => _buildBookingCard(booking, isUpcoming: false)),
+                          const SizedBox(height: 24),
+
+                          // "See All Reservations" button
+                          Center(
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFFFF6D00),
+                                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                              ),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => ReservationGraphScreen(
+                                      pastBookings: _pastBookings,
+                                      futureBookings: _futureBookings,
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: const Text(
+                                'See All Reservations',
+                                style: TextStyle(fontSize: 16, color: Colors.white),
+                              ),
+                            ),
+                          ),
+
+                          const SizedBox(height: 24),
                         ],
                       ],
                     ),
@@ -323,7 +360,7 @@ class _BookingScreenState extends State<BookingScreen> {
                 ),
     );
   }
-
+  // Builds a card for each booking
   Widget _buildBookingCard(Map<String, dynamic> booking, {required bool isUpcoming}) {
     final date = booking['date'] as String;
     final time = booking['time'] as String;
@@ -353,7 +390,9 @@ class _BookingScreenState extends State<BookingScreen> {
       decoration: BoxDecoration(
         color: const Color(0xFFF9F9F9),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.orange.shade200),
+        border: Border.all(
+          color: isUpcoming ? Colors.orange.shade200 : Colors.grey.shade400,
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

@@ -44,7 +44,6 @@
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 
-	<!-- ✅ Required for local backend connection -->
 	<key>NSLocalNetworkUsageDescription</key>
 	<string>This app needs local network access for backend communication.</string>
 

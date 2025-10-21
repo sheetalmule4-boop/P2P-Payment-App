@@ -1,5 +1,6 @@
 from app import app, db, Nationality
 
+# This script seeds the database with a list of nationalities.
 with app.app_context():
     db.create_all()
 

@@ -1,6 +1,7 @@
 from app import app, db, ExpirationMonth, ExpirationYear
 from datetime import datetime
 
+# This script seeds the database with expiration months and years.
 with app.app_context():
     db.create_all()
 

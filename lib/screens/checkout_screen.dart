@@ -7,6 +7,7 @@ import 'feed_screen.dart';
 import 'booking_detail_screen.dart';
 import '../constants.dart';
 
+// This screen allows users to review and confirm their court booking details
 class CheckoutScreen extends StatefulWidget {
   final String timeSlot;
   final VoidCallback? onReserve;
@@ -19,8 +20,8 @@ class CheckoutScreen extends StatefulWidget {
 }
 
 class _CheckoutScreenState extends State<CheckoutScreen> with TickerProviderStateMixin {
-  late AnimationController _animationController;
-  late Animation<double> _slideAnimation;
+  late AnimationController _animationController; // Animation controller for slide animation
+  late Animation<double> _slideAnimation; // Slide animation for the user input section
   String? _currentUsername;
 
   String _selectedCourt = 'Auto selection';
@@ -43,6 +44,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> with TickerProviderStat
   // Store the actual available courts from API
   List<String> _availableCourts = ['Auto selection', 'Court 1', 'Court 2'];
 
+  // Initialize the user ID and available courts
   @override
   void initState() {
     super.initState();
@@ -57,6 +59,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> with TickerProviderStat
     );
   }
 
+  // Load available courts for the selected date and time slot
   Future<void> _loadAvailableCourts() async {
     if (widget.selectedDate == null) return;
     
@@ -93,6 +96,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> with TickerProviderStat
     }
   }
 
+  // Load the user ID from shared preferences
   Future<void> _loadUserId() async {
     final prefs = await SharedPreferences.getInstance();
     final storedUserId = prefs.getInt('user_id');
@@ -126,6 +130,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> with TickerProviderStat
     }
   }
 
+  // Fetch user cards from the backend
   Future<void> _fetchUserCards(int userId) async {
     final uri = Uri.parse('$baseUrl/get_user_cards/$userId');
     final res = await http.get(uri);
@@ -143,6 +148,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> with TickerProviderStat
     }
   }
 
+  // Helper method to get available courts for selection
   List<String> _getAvailableCourts() {
     return _availableCourts;
   }
@@ -158,9 +164,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> with TickerProviderStat
   }
 
   int _getGroupSizeLimit() => int.parse(_selectedGroupSize.split(' ')[0]);
-
   double _calculateTotal() => (_price - _discount) * (1 + _taxRate);
 
+  // Dispose of controllers and animation
   @override
   void dispose() {
     _promoController.dispose();
@@ -169,6 +175,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> with TickerProviderStat
     super.dispose();
   }
 
+  // Apply promo code logic
   void _applyPromoCode() {
     final code = _promoController.text.trim();
     if (code.toUpperCase() == 'SAVE10') {
@@ -184,6 +191,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> with TickerProviderStat
     }
   }
 
+  // Search users based on input
   Future<void> _searchUsers(String query) async {
     if (query.length < 2) return;
     final uri = Uri.parse('$baseUrl/search_users?query=$query');
@@ -194,6 +202,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> with TickerProviderStat
     }
   }
 
+  // Build the user input section with slide animation
   Widget _buildCardRow({required IconData icon, required String label, required String trailing, VoidCallback? onTap, Widget? customTrailing}) {
     return InkWell(
       onTap: onTap,
@@ -226,6 +235,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> with TickerProviderStat
     );
   }
 
+  // Build the user input section with slide animation
   Widget _buildCourtCard() {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8),
@@ -264,6 +274,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> with TickerProviderStat
     );
   }
 
+  // Build the group size selection card
   Widget _buildGroupSizeCard() {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8),
@@ -304,6 +315,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> with TickerProviderStat
     );
   }
 
+  // Build the payment method card
   Widget _buildPaymentMethodCard() {
     if (_userCards.isEmpty) return Container();
     
@@ -344,6 +356,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> with TickerProviderStat
     );
   }
 
+  // Build the promo code input card
   Widget _buildPromoCard() {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 12),
@@ -375,6 +388,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> with TickerProviderStat
     );
   }
 
+  // Submit the booking
   Future<void> _submitBooking() async {
   if (_userId == null || widget.selectedDate == null) return;
 
@@ -422,7 +436,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> with TickerProviderStat
     'promo_code': _promoController.text.trim(),
   };
 
-  print('📤 Booking payload: ${jsonEncode(payload)}');
+  print('Booking payload: ${jsonEncode(payload)}');
 
   final res = await http.post(
     Uri.parse('$baseUrl/add_booking'),
@@ -452,7 +466,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> with TickerProviderStat
     );
   }
 }
-
+  // Show the reservation confirmation dialog
   void _showReservationConfirmation() {
     final formattedDate = DateFormat.yMMMMEEEEd().format(widget.selectedDate!);
     showDialog(
@@ -470,6 +484,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> with TickerProviderStat
     );
   }
 
+  // Build the user input section with slide animation
   List<Widget> _buildUserInputs() {
     final groupSize = _getGroupSizeLimit();
 
@@ -656,6 +671,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> with TickerProviderStat
     });
   }
 
+  // Build the main UI
   @override
   Widget build(BuildContext context) {
     final formattedDate = DateFormat('EEEE, MMMM d').format(widget.selectedDate ?? DateTime.now());
@@ -768,11 +784,48 @@ class _CheckoutScreenState extends State<CheckoutScreen> with TickerProviderStat
               ],
             ),
             const SizedBox(height: 24),
-
             // Reserve button
             Center(
               child: ElevatedButton.icon(
-                onPressed: _submitBooking,
+                onPressed: () {
+                  if (_userCards.isEmpty) {
+                    showDialog(
+                      context: context,
+                      builder: (_) => AlertDialog(
+                        backgroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        title: const Text(
+                          'No Card Found',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        content: const Text(
+                          'Please add a card before proceeding to checkout.',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context); // Close dialog
+                              Navigator.pushNamed(context, '/card'); // Go to card screen
+                            },
+                            child: const Text(
+                              'Add Card',
+                              style: TextStyle(
+                                color: Color(0xFFFF6D00), // Orange color
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+
+                  } else {
+                    _submitBooking();
+                  }
+                },
                 icon: const Icon(Icons.check_circle, color: Colors.white),
                 label: Text(
                   _getGroupSizeLimit() > 1

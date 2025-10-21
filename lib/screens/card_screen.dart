@@ -11,6 +11,7 @@ class CardScreen extends StatefulWidget {
   State<CardScreen> createState() => _CardScreenState();
 }
 
+// This screen displays the user's saved cards and allows them to add or delete cards.
 class _CardScreenState extends State<CardScreen> {
   final List<Map<String, dynamic>> _cards = [];
   final List<Map<String, dynamic>> _banks = [];
@@ -22,6 +23,7 @@ class _CardScreenState extends State<CardScreen> {
     [Color(0xFF614385), Color(0xFF516395)], // Purple
   ];
 
+  // Deletes a card by its ID
   Future<void> _deleteCard(String cardId) async {
     final response = await http.delete(Uri.parse('$baseUrl//delete_card/$cardId'));
 
@@ -39,6 +41,7 @@ class _CardScreenState extends State<CardScreen> {
     }
   }
 
+  // Shows a confirmation dialog before deleting a card
   void _showDeleteConfirmation(String cardId) {
     showDialog(
       context: context,
@@ -74,6 +77,7 @@ class _CardScreenState extends State<CardScreen> {
     _fetchUserCards();
   }
 
+  // Fetches the user's saved cards from the server
   Future<void> _fetchUserCards() async {
     final prefs = await SharedPreferences.getInstance();
     final userId = prefs.getInt('user_id');
@@ -103,6 +107,7 @@ class _CardScreenState extends State<CardScreen> {
     }
   }
 
+  // Fetches the user's connected banks from the server
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -176,6 +181,7 @@ class _CardScreenState extends State<CardScreen> {
     );
   }
 
+  // Builds a card item widget
   Widget _buildCardItem(Map<String, dynamic> card) {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
@@ -228,7 +234,7 @@ class _CardScreenState extends State<CardScreen> {
       ),
     );
   }
-
+  // Builds a bank item widget
   Widget _buildBankItem(Map<String, dynamic> bank) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
@@ -276,6 +282,8 @@ class _CardScreenState extends State<CardScreen> {
   }
 }
 
+
+// This screen allows users to add a new card to their account.
 class AddCardScreen extends StatefulWidget {
   const AddCardScreen({super.key});
 
@@ -311,6 +319,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
     _loadUserId();
   }
 
+  // Fetches the list of states from the server
   Future<void> _fetchStates() async {
     final response = await http.get(Uri.parse('$baseUrl/get_states'));
     if (response.statusCode == 200) {
@@ -318,6 +327,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
     }
   }
 
+  // Fetches the expiration months and years from the server
   Future<void> _fetchExpirationData() async {
     final monthRes = await http.get(Uri.parse('$baseUrl//get_expiration_months'));
     final yearRes = await http.get(Uri.parse('$baseUrl//get_expiration_years'));
@@ -329,6 +339,8 @@ class _AddCardScreenState extends State<AddCardScreen> {
       });
     }
   }
+
+  // Loads the user ID from shared preferences
   Future<void> _loadUserId() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -336,58 +348,64 @@ class _AddCardScreenState extends State<AddCardScreen> {
     });
   }
 
-  bool isValidCardNumber(String input) {
-    input = input.replaceAll(' ', '');
-    if (input.isEmpty || input.length < 13) return false;
-    int sum = 0;
-    bool alternate = false;
-    for (int i = input.length - 1; i >= 0; i--) {
-      int n = int.tryParse(input[i]) ?? -1;
-      if (n == -1) return false;
-      if (alternate) {
-        n *= 2;
-        if (n > 9) n -= 9;
-      }
-      sum += n;
-      alternate = !alternate;
+
+  // Validates the card number using Luhn's algorithm, commented for now for demonstration purposes
+  // This function can be uncommented and used to validate card numbers.
+
+  // bool isValidCardNumber(String input) {
+  //   input = input.replaceAll(' ', '');
+  //   if (input.isEmpty || input.length < 13) return false;
+  //   int sum = 0;
+  //   bool alternate = false;
+  //   for (int i = input.length - 1; i >= 0; i--) {
+  //     int n = int.tryParse(input[i]) ?? -1;
+  //     if (n == -1) return false;
+  //     if (alternate) {
+  //       n *= 2;
+  //       if (n > 9) n -= 9;
+  //     }
+  //     sum += n;
+  //     alternate = !alternate;
+  //   }
+  //   return sum % 10 == 0;
+  // }
+
+
+  // Handles the form submission to add a new card
+  Future<void> _handleSubmit() async {
+    if (!_cardFormKey.currentState!.validate()) return;
+    _cardFormKey.currentState!.save();
+
+    final prefs = await SharedPreferences.getInstance();
+    final userId = prefs.getInt('user_id');
+
+    if (userId == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('User not logged in.')),
+      );
+      return;
     }
-    return sum % 10 == 0;
+
+    _cardData['user_id'] = userId.toString(); 
+    final response = await http.post(
+      Uri.parse('$baseUrl//add_card'),
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode(_cardData),
+    );
+
+    if (response.statusCode == 201) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Card added successfully!')),
+      );
+      Navigator.pop(context, true);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to add card.')),
+      );
+    }
   }
 
-
-Future<void> _handleSubmit() async {
-  if (!_cardFormKey.currentState!.validate()) return;
-  _cardFormKey.currentState!.save();
-
-  final prefs = await SharedPreferences.getInstance();
-  final userId = prefs.getInt('user_id');
-
-  if (userId == null) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('User not logged in.')),
-    );
-    return;
-  }
-
-  _cardData['user_id'] = userId.toString(); 
-  final response = await http.post(
-    Uri.parse('$baseUrl//add_card'),
-    headers: {"Content-Type": "application/json"},
-    body: jsonEncode(_cardData),
-  );
-
-  if (response.statusCode == 201) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Card added successfully!')),
-    );
-    Navigator.pop(context, true);
-  } else {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Failed to add card.')),
-    );
-  }
-}
-
+  // Builds a form field for card details
   Widget _buildCardField({
     required String label,
     required String key,
@@ -413,12 +431,15 @@ Future<void> _handleSubmit() async {
     );
   }
 
+  // Builds a form field for the card number with validation
   Widget _buildCardNumberField() {
     return Focus(
       onFocusChange: (hasFocus) {
         if (!hasFocus) {
           final cardNumber = cardController.text.trim();
-          setState(() => _cardValid = isValidCardNumber(cardNumber));
+          // setState(() => _cardValid = isValidCardNumber(cardNumber)); //commented out due to validation function being commented
+          setState(() => _cardValid = true);
+
         }
       },
       child: TextFormField(
@@ -433,17 +454,17 @@ Future<void> _handleSubmit() async {
             borderSide: BorderSide(color: Colors.deepOrange, width: 2),
           ),
           labelStyle: const TextStyle(color: Colors.brown),
-          suffixIcon: !_cardValid
-              ? IconButton(
-                  icon: const Icon(Icons.error, color: Colors.red),
-                  onPressed: _showInvalidCardDialog,
-                )
-              : null,
+          // suffixIcon: !_cardValid
+          //     ? IconButton(
+          //         icon: const Icon(Icons.error, color: Colors.red),
+          //         onPressed: _showInvalidCardDialog,
+          //       )
+          //     : null,
         ),
         style: const TextStyle(color: Colors.black, fontWeight: FontWeight.normal),
         validator: (value) {
           if (value == null || value.isEmpty) return 'Required';
-          if (!isValidCardNumber(value)) return 'Invalid card number';
+          // if (!isValidCardNumber(value)) return 'Invalid card number';
           return null;
         },
         onSaved: (value) => _cardData['card_number'] = value!.trim(),
@@ -452,36 +473,36 @@ Future<void> _handleSubmit() async {
     );
   }
 
-void _showInvalidCardDialog() {
-  showDialog(
-    context: context,
-    builder: (_) => AlertDialog(
-      backgroundColor: Colors.white,
-      title: const Text(
-        'Invalid Card Number',
-        style: TextStyle(
-          color: Colors.black87,
-          fontWeight: FontWeight.bold,
+  // Shows a dialog if the card number is invalid, currently not used for demonstration purposes
+  void _showInvalidCardDialog() {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        backgroundColor: Colors.white,
+        title: const Text(
+          'Invalid Card Number',
+          style: TextStyle(
+            color: Colors.black87,
+            fontWeight: FontWeight.bold,
+          ),
         ),
+        content: const Text(
+          'Please enter a valid credit card number.',
+          style: TextStyle(
+            color: Colors.black54,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('OK'),
+          ),
+        ],
       ),
-      content: const Text(
-        'Please enter a valid credit card number.',
-        style: TextStyle(
-          color: Colors.black54,
-        ),
-      ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: const Text('OK'),
-        ),
-      ],
-    ),
-  );
-}
+    );
+  }
 
-
-
+  // Builds the main UI for adding a card
   @override
   Widget build(BuildContext context) {
     final spacing = const SizedBox(height: 16);
