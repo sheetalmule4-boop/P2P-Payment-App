@@ -1,4 +1,4 @@
-Paddle App
+Paddle App: Digital Payment between parties
 
 Paddle App is a cross-platform mobile application built using Flutter that enables users to book paddle courts, share expenses, and manage peer-to-peer (P2P) payments securely.
 It supports user authentication, payment processing, and real-time transaction tracking through RESTful APIs integrated with Mastercard Send.
