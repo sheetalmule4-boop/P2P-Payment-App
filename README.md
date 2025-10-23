@@ -4,6 +4,8 @@ Paddle App is a cross-platform mobile application built using Flutter that enabl
 It supports user authentication, payment processing, and real-time transaction tracking through RESTful APIs integrated with Mastercard Send.
 
 
+
+
 **Tech Stack**
 Frontend (Mobile Application)
 
@@ -29,6 +31,8 @@ SQLAlchemy – Object Relational Mapper (ORM) for efficient and secure database 
 
 
 
+
+
 **Key Features**
 
 Book Paddle Courts – View and reserve available courts with friends
@@ -45,10 +49,17 @@ P2P Payments – Send and receive funds using Mastercard Send APIs
 
 
 
+
+
+
 **Authentication and API Integration**
 
 This project is a Proof of Concept (PoC) designed to demonstrate application flow, UI, and API integration structure.
 For security reasons, certain sensitive components (such as OAuth 2.0, JWT-based authentication, and direct Mastercard Send API calls) are implemented within the organization’s private source code and are not included in this repository.
+
+
+
+
 
 
 **Summary**
@@ -61,6 +72,9 @@ REST API integration using Flask and SQLAlchemy
 Secure data handling and modular architecture
 
 Real-world fintech workflow simulation with Mastercard Send
+
+
+
 
 
 
