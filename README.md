@@ -54,22 +54,6 @@ This project is a Proof of Concept (PoC) designed to demonstrate application flo
 For security reasons, certain sensitive components (such as OAuth 2.0, JWT-based authentication, and direct Mastercard Send API calls) are implemented within the organization’s private source code and are not included in this repository.
 
 
-
---------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-Summary
-
-Paddle App highlights:
-
-Cross-platform development using Flutter
-
-REST API integration using Flask and SQLAlchemy
-
-Secure data handling and modular architecture
-
-Real-world fintech workflow simulation with Mastercard Send
-
-
 --------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 User Application Flow
@@ -95,3 +79,17 @@ Mastercard Send APIs are used for fund transfer and transaction processing.
 
 7. Transaction History & Notifications:
 All transactions are logged in the database, and confirmation emails are sent to all participants.
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Summary
+
+Paddle App highlights:
+
+Cross-platform development using Flutter
+
+REST API integration using Flask and SQLAlchemy
+
+Secure data handling and modular architecture
+
+Real-world fintech workflow simulation with Mastercard Send
