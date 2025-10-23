@@ -3,6 +3,7 @@ Paddle App: Digital Payment between Parties
 Paddle App is a cross-platform mobile application built using Flutter that enables users to book paddle courts, share expenses, and manage peer-to-peer (P2P) payments securely.
 It supports user authentication, payment processing, and real-time transaction tracking through RESTful APIs integrated with Mastercard Send.
 
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
 Tech Stack
 Frontend (Mobile Application)
 
@@ -26,6 +27,9 @@ SQLite – Relational database for storing user, booking, and transaction data
 
 SQLAlchemy – Object Relational Mapper (ORM) for efficient and secure database interaction
 
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 Key Features
 
 Book Paddle Courts – View and reserve available courts with friends
@@ -40,10 +44,18 @@ Wallet Management – Add and manage cards securely within the app
 
 P2P Payments – Send and receive funds using Mastercard Send APIs
 
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 Authentication and API Integration
 
 This project is a Proof of Concept (PoC) designed to demonstrate application flow, UI, and API integration structure.
 For security reasons, certain sensitive components (such as OAuth 2.0, JWT-based authentication, and direct Mastercard Send API calls) are implemented within the organization’s private source code and are not included in this repository.
+
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 Summary
 
@@ -57,26 +69,29 @@ Secure data handling and modular architecture
 
 Real-world fintech workflow simulation with Mastercard Send
 
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 User Application Flow
 
-User Registration:
+1. User Registration:
 Users register with details such as name, email, username, and phone number.
 
-Login & Authentication:
+2. Login & Authentication:
 OAuth 2.0-based authentication is supported for secure login.
 
-Wallet Setup:
+3. Wallet Setup:
 Users can add and manage cards for future payments.
 
-Court Booking:
+4. Court Booking:
 View available courts filtered by date and time, then select a slot to book.
 
-Payment Options:
+5. Payment Options:
 Choose between a single payment or split payment mode.
 In split mode, users select other participants, and the cost is divided equally.
 
-Transaction Processing:
+6. Transaction Processing:
 Mastercard Send APIs are used for fund transfer and transaction processing.
 
-Transaction History & Notifications:
+7. Transaction History & Notifications:
 All transactions are logged in the database, and confirmation emails are sent to all participants.
